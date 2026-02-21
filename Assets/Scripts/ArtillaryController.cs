@@ -24,7 +24,7 @@ public class ArtillaryController : MonoBehaviour
     [Header("Barrel Visual")]
     [SerializeField] private Transform barrelPivot;
 
-    [Tooltip("Use this if your barrel sprite points UP instead of RIGHT.")]
+    
     [SerializeField] private bool barrelForwardIsUp;
 
     [Header("Delayed Shot")]
