@@ -34,6 +34,10 @@ public class ArtillaryController : MonoBehaviour
     [SerializeField] private float fireDelaySeconds = 3f;
     [SerializeField] private float constantProjectileSpeed = 15f;
 
+    [Header("Recoil")]
+    [SerializeField] private Rigidbody2D recoilBody;
+    [SerializeField] private float recoilImpulse = 0.6f;
+
     [Header("Prediction")]
     [SerializeField] private float predictionStep = 0.05f;
     [SerializeField] private float maxPredictionTime = 8f;
@@ -84,10 +88,10 @@ public class ArtillaryController : MonoBehaviour
             StopCoroutine(pendingFire);
         }
 
-        pendingFire = StartCoroutine(FireAfterDelay(predictedPath));
+        pendingFire = StartCoroutine(FireAfterDelay(predictedPath, launchDirection));
     }
 
-    private IEnumerator FireAfterDelay(List<Vector2> path)
+    private IEnumerator FireAfterDelay(List<Vector2> path, Vector2 launchDirection)
     {
         yield return new WaitForSeconds(fireDelaySeconds);
         pendingFire = null;
@@ -104,6 +108,7 @@ public class ArtillaryController : MonoBehaviour
         projectile.bodyType = RigidbodyType2D.Kinematic;
 
         StartCoroutine(MoveProjectileAlongPath(projectile, path));
+        ApplyRecoil(launchDirection);
     }
 
     private IEnumerator MoveProjectileAlongPath(Rigidbody2D projectile, List<Vector2> path)
@@ -217,5 +222,16 @@ public class ArtillaryController : MonoBehaviour
         Vector3 origin = firePoint != null ? firePoint.position : barrelPivot.position;
         Vector3 forward = barrelForwardIsUp ? barrelPivot.up : barrelPivot.right;
         aimCursor.position = origin + forward * aimCursorDistance;
+    }
+
+    private void ApplyRecoil(Vector2 launchDirection)
+    {
+        if (recoilBody == null || recoilImpulse <= 0f)
+        {
+            return;
+        }
+
+        Vector2 recoilDirection = -launchDirection.normalized;
+        recoilBody.AddForce(recoilDirection * recoilImpulse, ForceMode2D.Impulse);
     }
 }
