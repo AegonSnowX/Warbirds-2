@@ -25,10 +25,14 @@ public class EnemyBomber : MonoBehaviour
 
     [Header("Bomb Physics")]
     [Tooltip("Optional initial downward speed for the bomb.")]
-    [SerializeField] private float bombInitialDownSpeed = 1f;
+    [SerializeField] private float bombInitialDownSpeed = 0.35f;
+    [Tooltip("How much of the bomber velocity is inherited by the bomb on release.")]
+    [SerializeField] private float inheritedVelocityMultiplier = 1f;
 
     private float nextDropTime;
     private HealthSystem healthSystem;
+    private Vector3 previousPosition;
+    private Vector2 estimatedVelocity;
 
     private void Awake()
     {
@@ -50,10 +54,13 @@ public class EnemyBomber : MonoBehaviour
 
         // Stagger initial drop so all bombers don't fire simultaneously
         nextDropTime = Time.time + Random.Range(0.5f, bombDropInterval);
+        previousPosition = transform.position;
     }
 
     private void Update()
     {
+        UpdateEstimatedVelocity();
+
         if (playerTarget == null || bombPrefab == null)
         {
             return;
@@ -88,6 +95,18 @@ public class EnemyBomber : MonoBehaviour
         nextDropTime = Time.time + bombDropInterval + variance;
     }
 
+    private void UpdateEstimatedVelocity()
+    {
+        float dt = Time.deltaTime;
+        if (dt > 0f)
+        {
+            Vector3 delta = transform.position - previousPosition;
+            estimatedVelocity = new Vector2(delta.x / dt, delta.y / dt);
+        }
+
+        previousPosition = transform.position;
+    }
+
     private void DropBomb()
     {
         Vector3 spawnPos = bombDropPoint.position;
@@ -98,23 +117,13 @@ public class EnemyBomber : MonoBehaviour
         if (bombRb != null)
         {
             Rigidbody2D parentRb = GetComponent<Rigidbody2D>();
-            float inheritedVx = 0f;
-            if (parentRb != null)
+            Vector2 inheritedVelocity = estimatedVelocity;
+            if (parentRb != null && parentRb.linearVelocity.sqrMagnitude > 0.001f)
             {
-                inheritedVx = parentRb.linearVelocity.x;
-            }
-            else
-            {
-                // Estimate from EnemyMovement direction
-                EnemyMovement movement = GetComponent<EnemyMovement>();
-                if (movement != null)
-                {
-                    // Use transform scale to infer direction
-                    inheritedVx = Mathf.Sign(transform.localScale.x) * 3f;
-                }
+                inheritedVelocity = parentRb.linearVelocity;
             }
 
-            bombRb.linearVelocity = new Vector2(inheritedVx, -bombInitialDownSpeed);
+            bombRb.linearVelocity = (inheritedVelocity * inheritedVelocityMultiplier) + Vector2.down * bombInitialDownSpeed;
         }
 
         Debug.Log("EnemyBomber: Bomb dropped!");

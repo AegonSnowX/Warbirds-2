@@ -19,6 +19,10 @@ public class EnemyMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private bool startMovingRight = true;
+    [Tooltip("If enabled, initial direction is chosen from spawn side: left spawns move right, right spawns move left.")]
+    [SerializeField] private bool autoDirectionFromSpawnSide = true;
+    [Tooltip("Set true if your sprite naturally faces right when localScale.x is positive.")]
+    [SerializeField] private bool spriteFacesRightAtPositiveScale = false;
 
     [Header("Flight Pattern")]
     [SerializeField] private FlightPattern flightPattern = FlightPattern.Horizontal;
@@ -53,11 +57,25 @@ public class EnemyMovement : MonoBehaviour
 
     private void Awake()
     {
-        direction = startMovingRight ? 1f : -1f;
-
         if (targetCamera == null)
         {
-            targetCamera = Camera.main.gameObject;
+            Camera mainCam = Camera.main;
+            if (mainCam != null)
+            {
+                targetCamera = mainCam.gameObject;
+            }
+        }
+
+        direction = startMovingRight ? 1f : -1f;
+        if (autoDirectionFromSpawnSide)
+        {
+            float centerX = 0f;
+            if (targetCamera != null)
+            {
+                centerX = targetCamera.transform.position.x;
+            }
+
+            direction = transform.position.x <= centerX ? 1f : -1f;
         }
 
         if (diveTarget == null)
@@ -191,7 +209,8 @@ public class EnemyMovement : MonoBehaviour
     private void ApplyFacing()
     {
         Vector3 scale = transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * Mathf.Sign(direction);
+        float facingSign = spriteFacesRightAtPositiveScale ? Mathf.Sign(direction) : -Mathf.Sign(direction);
+        scale.x = Mathf.Abs(scale.x) * facingSign;
         transform.localScale = scale;
     }
 

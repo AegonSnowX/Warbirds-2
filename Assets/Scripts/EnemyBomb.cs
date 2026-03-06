@@ -13,6 +13,16 @@ public class EnemyBomb : MonoBehaviour
     [Tooltip("Seconds before self-destruct if no collision occurs.")]
     [SerializeField] private float lifetimeSeconds = 6f;
 
+    [Header("Fall Physics")]
+    [Tooltip("Lower values make the bomb fall more slowly.")]
+    [SerializeField] private float gravityScale = 0.35f;
+
+    [Header("Rotation")]
+    [Tooltip("Degrees per second while rotating to match movement direction.")]
+    [SerializeField] private float rotationSpeed = 120f;
+    [Tooltip("Angle offset so the bomb tip points into the movement direction.")]
+    [SerializeField] private float tipAngleOffset = -90f;
+
     [Header("Visual")]
     [Tooltip("Optional trail renderer to enable on spawn.")]
     [SerializeField] private TrailRenderer trail;
@@ -28,6 +38,11 @@ public class EnemyBomb : MonoBehaviour
     {
         Destroy(gameObject, lifetimeSeconds);
 
+        if (rb != null)
+        {
+            rb.gravityScale = gravityScale;
+        }
+
         if (trail != null)
         {
             trail.enabled = true;
@@ -36,11 +51,13 @@ public class EnemyBomb : MonoBehaviour
 
     private void Update()
     {
-        // Rotate bomb to face its velocity direction
+        // Rotate bomb gradually so it falls tip-first without snapping instantly.
         if (rb != null && rb.linearVelocity.sqrMagnitude > 0.01f)
         {
-            float angle = Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            float targetAngle = Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg + tipAngleOffset;
+            float currentAngle = transform.eulerAngles.z;
+            float nextAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0f, 0f, nextAngle);
         }
     }
 

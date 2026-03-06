@@ -181,4 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBomb
   damage: 1
   lifetimeSeconds: 6
+  gravityScale: 0.35
+  rotationSpeed: 60
+  tipAngleOffset: -90
   trail: {fileID: 0}
