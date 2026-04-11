@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8039828076079088313}
   - component: {fileID: 219407655069168213}
   - component: {fileID: 8911327947886386571}
-  - component: {fileID: 3667070825207195119}
+  - component: {fileID: 8516080377699280873}
   m_Layer: 7
   m_Name: Bomb
   m_TagString: Untagged
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3067748270952945597}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
   m_LocalPosition: {x: -5.64, y: -1.07, z: 0}
   m_LocalScale: {x: 0.05, y: 0.05, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!212 &8039828076079088313
 SpriteRenderer:
   serializedVersion: 2
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3560270392702496683, guid: 85b1df03a46003e4da41fa26cc9b0132, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -167,7 +167,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &3667070825207195119
+--- !u!114 &8516080377699280873
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,25 +176,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3067748270952945597}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a79d96be9fbee474f8e5169a5f65f0d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 94d63fca69ce27948879d19af7f6437c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBomb
-  damage: 1
-  lifetimeSeconds: 6
-  gravityScale: 0.25
-  torqueAmount: 0.015
-  noseDiveStrength: 0.015
-  leftFacingSpawnRotation: 90
-  explosionPrefab: {fileID: 0}
-  explosionLifetime: 4
-  trail: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::Bomb
+  torqueAmount: 0.025
   groundContactFilter:
     useTriggers: 0
     useLayerMask: 0
     useDepth: 0
     useOutsideDepth: 0
     useNormalAngle: 0
-    useOutsideNormalAngle: 0
+    useOutsideNormalAngle: 1
     layerMask:
       serializedVersion: 2
       m_Bits: 0
@@ -202,4 +194,5 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  parentBomber: {fileID: 0}
+  Explosion1Prefab: {fileID: 755802778073451349, guid: a752397ec2d540249906564e3074b16a, type: 3}
+  parentBomber: {fileID: 2019141489469451739, guid: 2afd926441a461a40bc7feae7bc71bdc, type: 3}

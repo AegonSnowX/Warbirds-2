@@ -43,8 +43,7 @@ GameObject:
   - component: {fileID: 3289487807747646973}
   - component: {fileID: 4957298381758208419}
   - component: {fileID: 1959946622913529479}
-  - component: {fileID: 5894418175003935569}
-  - component: {fileID: -2697093689195081860}
+  - component: {fileID: 2019141489469451739}
   m_Layer: 6
   m_Name: BomberPrebfab-1
   m_TagString: Enemy
@@ -119,7 +118,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2414702740292125011, guid: a515ed3071a00df419e349f2fb9bf384, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -200,7 +199,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 13.394211, y: 4.0057344}
   m_EdgeRadius: 0
---- !u!114 &5894418175003935569
+--- !u!114 &2019141489469451739
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -209,39 +208,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6505338360018898773}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6525e3934cf67ef4399a4c740e34b6d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 4814c2f70763d844081725e05ac4fa8d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  moveSpeed: 1
-  startMovingRight: 1
-  autoDirectionFromSpawnSide: 1
-  spriteFacesRightAtPositiveScale: 0
-  flightPattern: 0
-  zigzagAmplitude: 1.5
-  zigzagFrequency: 2
-  diveDepth: 3
-  diveCycleDuration: 3
-  diveTarget: {fileID: 0}
-  extraOffscreenDistance: 2
-  fixedWorldXLimit: 0
-  targetCamera: {fileID: 0}
---- !u!114 &-2697093689195081860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6505338360018898773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4013e1818c8c4d846a67e9ab6b92f066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBomber
-  bombPrefab: {fileID: 3067748270952945597, guid: 513b6b444ac2275458814e2b056314cc, type: 3}
-  bombDropPoint: {fileID: 9043091397893188722}
-  playerTarget: {fileID: 0}
-  bombDropRange: 5
-  bombDropInterval: 5
-  intervalVariance: 0.5
-  bombInitialDownSpeed: 0.25
-  inheritedVelocityMultiplier: 1
+  m_EditorClassIdentifier: Assembly-CSharp::BomberController
+  FlightSpeed: 1.2
+  Bomb1Prefab: {fileID: 3067748270952945597, guid: 513b6b444ac2275458814e2b056314cc, type: 3}
+  bomberRb: {fileID: 4957298381758208419}
+  Bomb2Prefab: {fileID: 3067748270952945597, guid: 513b6b444ac2275458814e2b056314cc, type: 3}
+  plane: {fileID: 3289487807747646973}
+  maxBorderX: 15
+  movingRight: 0
